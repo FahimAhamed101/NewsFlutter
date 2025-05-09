@@ -22,6 +22,7 @@ class HomeServices {
 
       if (response.statusCode == 200) {
         return NewsApiResponse.fromJson(response.data);
+        print(response.data);
       } else {
         throw Exception(response.statusMessage);
       }

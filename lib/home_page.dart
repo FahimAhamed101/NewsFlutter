@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsapp/home_cubit.dart';
 import 'package:newsapp/title_headline_widget.dart';
-
+import 'package:newsapp/custom_carousel_slider.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -51,8 +51,12 @@ class _HomePageState extends State<HomePage> {
                             return const Center(
                               child: CircularProgressIndicator.adaptive(),
                             );
-                          }
-                          else if (state is TopHeadlinesError) {
+                          } else if (state is TopHeadlinesLoaded) {
+                            final articles = state.articles;
+                            return CustomCarouselSlider(
+                              articles: articles ?? [],
+                            );
+                          } else if (state is TopHeadlinesError) {
                             return Center(
                               child: Text(state.message),
                             );
