@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsapp/home_cubit.dart';
 import 'package:newsapp/title_headline_widget.dart';
 import 'package:newsapp/custom_carousel_slider.dart';
+import 'package:newsapp/app_bar_button.dart';
+import 'package:newsapp/app_drawer.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -24,7 +27,32 @@ class _HomePageState extends State<HomePage> {
       },
       child: Scaffold(
         key: _scaffoldKey,
-
+        appBar: AppBar(
+          leading: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: AppBarButton(
+              iconData: Icons.menu,
+              onTap: () {
+                _scaffoldKey.currentState!.openDrawer();
+              },
+            ),
+          ),
+          actions: [
+            AppBarButton(
+              iconData: Icons.search,
+              hasPaddingBetween: true,
+              onTap: () => (),
+            ),
+            const SizedBox(width: 8),
+            AppBarButton(
+              iconData: Icons.notifications_none_rounded,
+              hasPaddingBetween: true,
+              onTap: () {},
+            ),
+            const SizedBox(width: 12),
+          ],
+        ),
+        drawer: const AppDrawer(),
         body: SafeArea(
           child: Builder(builder: (context) {
             final homeCubit = BlocProvider.of<HomeCubit>(context);
@@ -43,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                       child: BlocBuilder<HomeCubit, HomeState>(
                         bloc: homeCubit,
                         buildWhen: (previous, current) =>
-                        current is TopHeadlinesLoading ||
+                            current is TopHeadlinesLoading ||
                             current is TopHeadlinesLoaded ||
                             current is TopHeadlinesError,
                         builder: (context, state) {
@@ -71,7 +99,6 @@ class _HomePageState extends State<HomePage> {
                       title: 'Recommendation',
                       onTap: () {},
                     ),
-
                   ],
                 ),
               ),

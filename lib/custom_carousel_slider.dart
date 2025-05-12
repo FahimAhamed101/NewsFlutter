@@ -3,7 +3,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:newsapp/article_model.dart';
-import 'package:newsapp/news_api_response.dart';
 
 class CustomCarouselSlider extends StatefulWidget {
   final List<Article> articles;
@@ -24,12 +23,10 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
   Widget build(BuildContext context) {
     final List<Widget> imageSliders = widget.articles.map((article) {
       final parsedDate =
-      DateTime.parse(article.publishedAt ?? DateTime.now().toString());
+          DateTime.parse(article.publishedAt ?? DateTime.now().toString());
       final publishedDate = DateFormat.yMMMd().format(parsedDate);
       return InkWell(
-        onTap: () => (
-
-        ),
+        onTap: () => (),
         child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(16.0)),
             child: Stack(
@@ -112,7 +109,7 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
               width: _current == entry.key ? 25.0 : 12.0,
               height: 12.0,
               margin:
-              const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
+                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
               decoration: BoxDecoration(
                 borderRadius: _current == entry.key
                     ? const BorderRadius.all(Radius.circular(8))
@@ -120,7 +117,6 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
                 shape: _current == entry.key
                     ? BoxShape.rectangle
                     : BoxShape.circle,
-
               ),
             ),
           );

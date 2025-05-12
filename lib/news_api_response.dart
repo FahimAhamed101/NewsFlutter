@@ -1,4 +1,3 @@
-import 'package:hive/hive.dart';
 import 'package:newsapp/article_model.dart';
 
 class NewsApiResponse {

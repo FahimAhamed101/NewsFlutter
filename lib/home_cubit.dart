@@ -27,25 +27,4 @@ class HomeCubit extends Cubit<HomeState> {
       emit(TopHeadlinesError(e.toString()));
     }
   }
-
-
-  Future<List<Article>> _getFavorites() async {
-    // final favorites = await localDatabaseServices.getStringList(
-    //   AppConstants.favoritesKey,
-    // );
-    final favorites = await localDatabaseHive.getData<List<dynamic>?>(
-      AppConstants.favoritesKey,
-    );
-    if (favorites == null) {
-      return [];
-    }
-    // final List<Article> favArticles = [];
-    // if (favorites != null) {
-    //   for (var favArticleString in favorites) {
-    //     final favArticle = Article.fromJson(favArticleString);
-    //     favArticles.add(favArticle);
-    //   }
-    // }
-    return favorites.map((e) => e as Article).toList();
-  }
 }
