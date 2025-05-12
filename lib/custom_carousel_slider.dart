@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:newsapp/article_model.dart';
+import 'package:newsapp/app_routes.dart';
 
 class CustomCarouselSlider extends StatefulWidget {
   final List<Article> articles;
@@ -26,7 +27,11 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
           DateTime.parse(article.publishedAt ?? DateTime.now().toString());
       final publishedDate = DateFormat.yMMMd().format(parsedDate);
       return InkWell(
-        onTap: () => (),
+        onTap: () => Navigator.pushNamed(
+          context,
+          AppRoutes.articleDetails,
+          arguments: article,
+        ),
         child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(16.0)),
             child: Stack(
