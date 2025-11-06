@@ -27,4 +27,18 @@ class HomeCubit extends Cubit<HomeState> {
       emit(TopHeadlinesError(e.toString()));
     }
   }
+
+  // Add this method to get all news for recommendations
+  Future<void> getAllNews() async {
+    emit(AllNewsLoading());
+    try {
+      final result = await homeServices.getAllNews(
+        page: 1,
+        pageSize: 20, // You can adjust this number
+      );
+      emit(AllNewsLoaded(result.articles));
+    } catch (e) {
+      emit(AllNewsError(e.toString()));
+    }
+  }
 }

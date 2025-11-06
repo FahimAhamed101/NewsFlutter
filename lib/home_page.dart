@@ -5,7 +5,8 @@ import 'package:newsapp/title_headline_widget.dart';
 import 'package:newsapp/custom_carousel_slider.dart';
 import 'package:newsapp/app_bar_button.dart';
 import 'package:newsapp/app_drawer.dart';
-
+import 'package:newsapp/news_card.dart';
+import 'package:newsapp/app_routes.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -21,8 +22,8 @@ class _HomePageState extends State<HomePage> {
     return BlocProvider(
       create: (context) {
         final homeCubit = HomeCubit();
-        homeCubit.getTopHeadlines();
-
+        homeCubit.getTopHeadlines(); // Load breaking news
+        homeCubit.getAllNews(); // Load recommendations
         return homeCubit;
       },
       child: Scaffold(
@@ -41,7 +42,7 @@ class _HomePageState extends State<HomePage> {
             AppBarButton(
               iconData: Icons.search,
               hasPaddingBetween: true,
-              onTap: () => (),
+              onTap: () {},
             ),
             const SizedBox(width: 8),
             AppBarButton(
@@ -62,6 +63,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
                   children: [
+                    // Breaking News Section
                     TitleHeadlineWidget(
                       title: 'Breaking News',
                       onTap: () {},
@@ -71,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                       child: BlocBuilder<HomeCubit, HomeState>(
                         bloc: homeCubit,
                         buildWhen: (previous, current) =>
-                            current is TopHeadlinesLoading ||
+                        current is TopHeadlinesLoading ||
                             current is TopHeadlinesLoaded ||
                             current is TopHeadlinesError,
                         builder: (context, state) {
@@ -95,9 +97,63 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     const SizedBox(height: 16),
+
+                    // Recommendations Section
                     TitleHeadlineWidget(
                       title: 'Recommendation',
-                      onTap: () {},
+                      onTap: () {
+
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    // All News List
+                    BlocBuilder<HomeCubit, HomeState>(
+                      bloc: homeCubit,
+                      buildWhen: (previous, current) =>
+                      current is AllNewsLoading ||
+                          current is AllNewsLoaded ||
+                          current is AllNewsError,
+                      builder: (context, state) {
+                        if (state is AllNewsLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          );
+                        } else if (state is AllNewsLoaded) {
+                          final articles = state.articles;
+
+                          if (articles == null || articles.isEmpty) {
+                            return const Center(
+                              child: Text('No news available'),
+                            );
+                          }
+
+                          return ListView.separated(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: articles.length,
+                            separatorBuilder: (context, index) =>
+                            const SizedBox(height: 16),
+                            itemBuilder: (context, index) {
+                              final article = articles[index];
+                              return NewsCard(
+                                article: article,
+                                onTap: () => Navigator.pushNamed(
+                                  context,
+                                  AppRoutes.articleDetails,
+                                  arguments: article,
+                                ),
+                              );
+                            },
+                          );
+                        } else if (state is AllNewsError) {
+                          return Center(
+                            child: Text(state.message),
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      },
                     ),
                   ],
                 ),
